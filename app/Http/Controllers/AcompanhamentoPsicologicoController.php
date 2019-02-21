@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\AcompanhamentoPsicologico;
 
 class AcompanhamentoPsicologicoController extends Controller
 {
@@ -13,7 +14,8 @@ class AcompanhamentoPsicologicoController extends Controller
      */
     public function index()
     {
-        //
+        $acompanhamentopsicologico = AcompanhamentoPsicologico::all();
+        return view("acompanhamentopsicologico.listar",['acompanhamentos'=>$acompanhamentopsicologico]);
     }
 
     /**
@@ -23,7 +25,7 @@ class AcompanhamentoPsicologicoController extends Controller
      */
     public function create()
     {
-        //
+        return view("acompanhamentopsicologico.inserir");
     }
 
     /**
@@ -34,7 +36,15 @@ class AcompanhamentoPsicologicoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         $acompanhamento = new AcompanhamentoPsicologico();
+         $acompanhamento->data = $request->input("data");
+         $acompanhamento->procedimento = $request->input("procedimento");
+         $acompanhamento->observacoes = $request->input("observacoes");
+         $acompanhamento->proxima_sessao = $request->input("proxima_sessao");
+
+         $acompanhamento->save();
+        return redirect()->route('acompanhamentopsicologico.index');
+
     }
 
     /**
@@ -45,7 +55,7 @@ class AcompanhamentoPsicologicoController extends Controller
      */
     public function show($id)
     {
-        //
+        $acompanhamento = AcompanhamentoPsicologico::find($id);
     }
 
     /**
@@ -56,7 +66,8 @@ class AcompanhamentoPsicologicoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $acompanhamento = AcompanhamentoPsicologico::find($id);
+        return view('acompanhamentopsicologico.editar', ['ap'=> $acompanhamento]);
     }
 
     /**
@@ -68,7 +79,14 @@ class AcompanhamentoPsicologicoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+         $acompanhamento = AcompanhamentoPsicologico::find($id);
+         $acompanhamento->data = $request->input("data");
+         $acompanhamento->procedimento = $request->input("procedimento");
+         $acompanhamento->observacoes = $request->input("observacoes");
+         $acompanhamento->proxima_sessao = $request->input("proxima_sessao");
+
+         $acompanhamento->save();
+        return redirect()->route('acompanhamentopsicologico.index');
     }
 
     /**
@@ -79,6 +97,9 @@ class AcompanhamentoPsicologicoController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $acompanhamento = AcompanhamentoPsicologico::find($id); // consulta no BD
+        $acompanhamento->delete();  // Exclui do BD
+
+        return redirect()->route('acompanhamentopsicologico.index');
     }
 }
